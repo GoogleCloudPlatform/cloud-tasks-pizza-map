@@ -7,7 +7,7 @@ The program works in the following way:
 
 1. Creates a Cloud Tasks Queue
 1. Creates ~10,000 Cloud Tasks with different names of cities
-1. Each Cloud Task executes a Cloud Function. This Function does the following:
+1. Each Cloud Task triggers a Cloud Function. This Function does the following:
   1. Looks up the best pizza restaurant in that city accoring to the Google Maps Places API
   1. Stores the restaurant data in Firestore
 
@@ -57,7 +57,7 @@ To test our server locally, follow these instructions using our `KEY` from the p
 
 ```sh
 npm i
-KEY=??? npm run ff
+KEY=??? npm start
 ```
 
 Observe the Functions Framework starts a server and logs information:

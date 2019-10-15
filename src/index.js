@@ -22,7 +22,7 @@ const express = require('express');
 const app = express();
 const routes = {
   '/tasks/start': require('./tasks').start,
-  '/tasks/listnames': require('./tasks').list,
+  '/tasks/listnames': require('./tasks').listnames,
   '/maps/add': require('./maps').add,
   '/maps/get': require('./maps').get,
   '/maps/list': require('./maps').list,

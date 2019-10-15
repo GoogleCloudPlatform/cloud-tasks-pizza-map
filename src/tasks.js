@@ -48,8 +48,8 @@ async function createQueue(queueName) {
     parent: client.locationPath(PROJECT, LOCATION),
     queue: {
       name: client.queuePath(PROJECT, LOCATION, queueName),
-      // rate_limits: {},
-      // retry_config: {},
+      rate_limits: {},
+      retry_config: {},
     },
   };
   const res = await client.createQueue(request);
@@ -62,12 +62,10 @@ async function createQueue(queueName) {
  * @returns `true` if the queue exists.
  */
 async function queueExists(queueName) {
-  const request = {
-    parent: client.locationPath(PROJECT, LOCATION),
-  };
-  const [queues] = await client.listQueues(request);
-  const queuePath = client.queuePath(PROJECT, LOCATION, queueName);
-  return queues.filter((queue) => queue.name === queuePath).length > 0;
+  const queue = await client.getQueue({
+    name: client.queuePath(PROJECT, LOCATION, queueName)
+  });
+  return queue.length > 0;
 }
 
 /**
@@ -78,7 +76,7 @@ async function createTask(placeName) {
   const normalizedName = placeName.normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '') // Remove accents
       .replace(/[^a-zA-Z]+/g, "-"); // Only keep [a-zA-Z]
-  const name = `projects/${PROJECT}/locations/${LOCATION}/queues/${QUEUE}/tasks/${normalizedName}`;  
+  const name = client.taskPath(PROJECT, LOCATION, QUEUE, normalizedName);
   const task = {
     name,
     httpRequest: {

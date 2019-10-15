@@ -5,8 +5,7 @@
   "main": "src/index.js",
   "private": true,
   "scripts": {
-    "ff": "FUNCTION_SOURCE=src ./node_modules/@google-cloud/functions-framework/build/src/index.js",
-    "start": "node src/tasks.js",
+    "start": "FUNCTION_SOURCE=src npx @google-cloud/functions-framework",
     "deploy": "gcloud functions deploy tasks-pizza --trigger-http --runtime=nodejs10 --env-vars-file=.env.yaml"
   },
   "dependencies": {

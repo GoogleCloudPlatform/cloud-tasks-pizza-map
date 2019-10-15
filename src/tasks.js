@@ -17,10 +17,9 @@ const {v2beta3} = require('@google-cloud/tasks'); // Must be v2beta3 or else tas
 const client = new v2beta3.CloudTasksClient();
 
 // Application configuration
-// TODO make the env vars
-const PROJECT = 'serverless-com-demo';
-const QUEUE = 'my-queue';
-const LOCATION = 'us-central1';
+const PROJECT = process.env.PROJECT || 'serverless-com-demo';
+const QUEUE = process.env.QUEUE || 'my-queue';
+const LOCATION = process.env.LOCATION || 'us-central1';
 
 // Construct the fully qualified queue name.
 const parent = client.queuePath(PROJECT, LOCATION, QUEUE);
@@ -119,7 +118,7 @@ async function run() {
   console.log('Done.');
 }
 
-// Routes
+// Export routes for Express app
 module.exports.listnames = async (req, res) => {
   const locationList = await getLocationNames();
   res.send(locationList);

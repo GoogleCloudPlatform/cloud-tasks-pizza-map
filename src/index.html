@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- This sample is extended from the GMP Maps JavaScript API tutorial:
+  https://developers.google.com/maps/documentation/javascript/tutorial -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cloud Tasks Pizza Map</title>
+    <style>
+      /* Set map height explicitly to define the size of the div element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      let map; // The GMP map object.
+
+      // Callback from GMP Maps embed script.
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3, // full screen
+          center: {lat: 0, lng: 0},
+          mapTypeControl: false, // disable satellite view
+        });
+      }
+
+      // Wrap in async IIFE to allow async syntax
+      (async () => {
+        // Gets the URL for the API
+        const GET_API_BASE_URL = () => {
+          let URL = window.location.origin;
+          if (!window.location.origin.includes('localhost')) {
+            // include project ID in prod
+            URL += '/tasks-pizza';
+          }
+          return URL;
+        };
+
+        // Get list of location names
+        (async () => {
+          const URL = `${GET_API_BASE_URL()}/maps/listnames`;
+          const namesFetch = await fetch(URL);
+          const names = await namesFetch.json();
+          for (const id of names) {
+            // Get the map data and add a marker (with that data) to the map.
+            const mapData = await (await fetch(`${GET_API_BASE_URL()}/maps/get?id=${id}`)).json();
+            addMarkerToMap(mapData);
+          }
+        })();
+        
+        let markers = [];
+        let infoWindowList = []; // Info box controller
+        /**
+         * Adds a marker to the map.
+         * @param {object} place The place data from the GMP Places API
+         * @param {string} id The id of the Task
+         * @param {url} url The URL of the place on Google Maps.
+         * @see https://developers.google.com/maps/documentation/javascript/markers
+         */
+        function addMarkerToMap({place, id, url}) {
+          const marker = new google.maps.Marker({
+            position: place.geometry.location,
+            map,
+            animation: google.maps.Animation.DROP
+          });
+
+          let content = `<div id="content">
+            <div id="siteNotice">
+            </div>
+            <h1 id="firstHeading" class="firstHeading">${place.name}</h1>
+            <p><b>Rating:</b> ${place.rating} (${place.user_ratings_total || 0} ratings)
+            <p><b>Price:</b> ${place.price_level ? '$'.repeat(place.price_level) : 'N/A'}
+            <p><b>Address:</b> <a target="_blank" href="${url}">${place.vicinity}</a>
+            </div>`;
+
+          let infowindow = new google.maps.InfoWindow({
+            content,
+            maxWidth: 200
+          });
+          marker.addListener('click', () => {
+            infoWindowList.map(i => i.close()); // close all other windows
+            infoWindowList = [infowindow]; // add this window to list
+            infowindow.open(map, marker);
+          });
+          marker.setMap(map);
+          markers.push(marker);
+        }
+
+        /**
+         * Clears all markers from the map.
+         */
+        function clearMarkers() {
+          markers.map(marker => marker.setMap(null));
+          markers = [];
+        }
+
+        // Get the GMP API key dynamically from our API.
+        const URL = `${GET_API_BASE_URL()}/maps/key`;
+        const keyFetch = await fetch(URL);
+        const {key} = await keyFetch.json();
+
+        // Add the GMP client. When done, call initMap()
+        let s = document.createElement('script');
+        s.setAttribute('src', `https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`);
+        document.body.appendChild(s);
+      })();
+    </script>
+  </body>
+</html>

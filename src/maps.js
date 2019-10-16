@@ -17,7 +17,6 @@
  * All methods require the environment variable `KEY`.
  */
 const KEY = process.env.KEY;
-const fetch = require('node-fetch');
 const maps = require('@google/maps').createClient({
   key: KEY,
   Promise,
@@ -26,26 +25,6 @@ const firestore = require('./firestore');
 
 if (!KEY) {
   throw new Error('Missing `KEY` environment variable for Google Maps.');
-}
-
-/**
- * Gets a static map of a location.
- * @example https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=2800x1900&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=AIzaSyDh7gKmvLzFA0q_ICGkO8ryvEMm3Nrde-c&scale=2
- * @see https://developers.google.com/maps/documentation/javascript/markers#introduction
- */
-async function getStaticMap() {
-  const centerQuery = 'Brooklyn+Bridge,New+York,NY';
-  const staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?' + [
-    `center=${centerQuery}`,
-    `zoom=14`,
-    `size=500x500`, // 2800x1900
-    `maptype=roadmap`,
-    `markers=color:blue%7Clabel:S%7C40.702147,-74.015794`,
-    `key=${KEY}`
-  ].join('&');
-  console.log(staticMapURL);
-  const staticMap = await fetch(staticMapURL);
-  console.log(staticMap);
 }
 
 /**
@@ -76,40 +55,45 @@ const getPlace = async (placesQuery) => {
 
   // Find the place
   // @see https://developers.google.com/places/web-service/search
-  var places = await maps.findPlace({
-    input: `Best pizza near ${placesQuery}`,
-    inputtype: 'textquery',
-    language: 'en',
-    locationbias: `point:${lat},${lng}`,
-    fields: ['photos','formatted_address','name','rating','opening_hours','geometry'],
+  var places = await maps.placesNearby({
+    radius: 5000, // meters
+    keyword: 'pizza',
+    type: 'restaurant',
+    location: [lat, lng],
   }).asPromise();
-  const place = places.json.candidates[0];
+  if (places.json.results.length === 0) return; // no results found
+  const place = places.json.results[0];
   return place;
 }
 
-// Gets Map data from GMP Places API.
+// Gets Map data for a single id from the Firestore database.
 module.exports.get = async (req, res) => {
-  const placeId = req.query.query;
-  if (!placeId) return res.send({error: 'No ?query='});
-  const place = await getPlace(placeId);
+  const placeId = req.query.id;
+  if (!placeId) return res.send({error: 'No ?id='});
+  const place = await firestore.getLocation(placeId);
   res.send(place);
 };
 
-// Returns a list of maps in the Firestore database
-module.exports.list = async (req, res) => {
+// Returns a list of map names in the Firestore database.
+module.exports.listnames = async (req, res) => {
   const locations = await firestore.getLocations();
   res.send(locations);
 };
 
-// Adds a specific map to the Firestore database
+// Adds a specific map to the Firestore database.
 module.exports.add = async (req, res) => {
   // Only handle valid requests
-  const placeId = req.query.query;
-  if (!placeId) return res.send({error: 'No ?query='});
+  const id = req.query.id;
+  if (!id) return res.send({error: 'No ?id='});
 
   // Get the place
-  const place = await getPlace(placeId);
-  const placeData = {placeId, place};
-  await firestore.storeLocation(placeId, placeData);
+  const place = await getPlace(id);
+  if (!place) return res.send({error: 'No results found.'}); // no results found.
+  const placeData = {
+    id,
+    place,
+    url: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
+  };
+  await firestore.storeLocation(id, placeData);
   res.send(placeData);
 };

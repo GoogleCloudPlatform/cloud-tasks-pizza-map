@@ -34,6 +34,13 @@ module.exports.getLocations = async () => {
   return docs.map(d => d.id);
 }
 
+// Get a single location
+module.exports.getLocation = async (location) => {
+  const doc = await db.collection(COLLECTION).doc(location).get();
+  const data = doc.data();
+  return data || { error: 'No data for this location found.'};
+}
+
 /**
  * Store the location data
  * @param {string} location The name of the location

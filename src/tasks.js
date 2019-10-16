@@ -77,10 +77,10 @@ async function createTask(placeName) {
       .replace(/[^a-zA-Z]+/g, "-"); // Only keep [a-zA-Z]
   const name = client.taskPath(PROJECT, LOCATION, QUEUE, normalizedName);
   const task = {
-    name,
+    name, // Warning: Named Tasks cannot be re-created within a large timeframe (24h?)
     httpRequest: {
       httpMethod: 'GET',
-      url: `https://${LOCATION}-${PROJECT}.cloudfunctions.net/tasks-pizza/target?query=${placeName}`,
+      url: `https://${LOCATION}-${PROJECT}.cloudfunctions.net/tasks-pizza/target?id=${placeName}`,
     },
   };
 

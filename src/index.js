@@ -13,20 +13,24 @@
 // limitations under the License.
 
 /**
- * The main GCF program
+ * The main GCF function using the Functions Framework.
+ * @see https://github.com/GoogleCloudPlatform/functions-framework-nodejs
  */
+const path = require('path');
 require('dotenv').config();
 
 // Express Routing
 const express = require('express');
 const app = express();
 const routes = {
-  '/tasks/start': require('./tasks').start,
-  '/tasks/listnames': require('./tasks').listnames,
-  '/maps/add': require('./maps').add,
-  '/maps/get': require('./maps').get,
-  '/maps/list': require('./maps').list,
-  '/target': require('./maps').get, // Tasks target
+  '/tasks/start': require('./tasks').start, // Creates ~13k Cloud Tasks
+  '/tasks/listnames': require('./tasks').listnames, // Lists expected names of Tasks
+  '/maps/add': require('./maps').add, // Adds 1 city record to the database
+  '/maps/get': require('./maps').get, // Gets 1 city record from the database
+  '/maps/listnames': require('./maps').listnames, // List the names of all city records
+  '/maps/key': (req, res) => res.send({key: process.env.KEY}), // API KEY for frontend
+  '/target': require('./maps').add, // Tasks target, query and add a city record
+  '/web': (req, res) => res.sendFile(path.join(__dirname, 'index.html'))
 };
 Object.entries(routes).map(([route, func]) => app.use(route, func));
 app.use('/', (req, res) => res.send(Object.keys(routes))); // default

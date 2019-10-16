@@ -68,8 +68,10 @@ async function queueExists(queueName) {
 }
 
 /**
- * Creates a Cloud Task
+ * Creates a named Cloud Task.
+ * Note: The the placeName can't be added frequently as the Task de-duplication window is ~1h.
  * @param {string} placeName The name of the city/place to target for our HTTP request.
+ * @see https://cloud.google.com/tasks/docs/quotas
  */
 async function createTask(placeName) {
   const normalizedName = placeName.normalize('NFD')
@@ -80,7 +82,7 @@ async function createTask(placeName) {
     name,
     httpRequest: {
       httpMethod: 'GET',
-      url: `https://${LOCATION}-${PROJECT}.cloudfunctions.net/tasks-pizza/target?query=${placeName}`,
+      url: `https://${LOCATION}-${PROJECT}.cloudfunctions.net/tasks-pizza/target?id=${placeName}`,
     },
   };
 

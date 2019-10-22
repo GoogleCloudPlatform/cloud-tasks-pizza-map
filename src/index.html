@@ -65,6 +65,7 @@
          * @see https://developers.google.com/maps/documentation/javascript/markers
          */
         function addMarkerToMap({place, id, url}) {
+          if (!place || !place.geometry) return; // bad place
           const marker = new google.maps.Marker({
             position: place.geometry.location,
             map,

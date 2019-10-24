@@ -31,12 +31,10 @@ The following APIs are used in this app:
 - `Maps Geocoding API`
 - `Firestore API`
 
-[Enable APIs](https://console.cloud.google.com/flows/enableapi?apiid=cloudtasks.googleapis.com,firestore.googleapis.com,places-backend.googleapis.com,static-maps-backend.googleapis.com,geocoding-backend.googleapis.com
+[Enable these APIs](https://console.cloud.google.com/flows/enableapi?apiid=cloudtasks.googleapis.com,firestore.googleapis.com,places-backend.googleapis.com,static-maps-backend.googleapis.com,geocoding-backend.googleapis.com
 ).
 
 ### Create a Firestore database
-
-Create a `Firestore` database:
 
 [Create a `Firestore` database](https://firebase.google.com/docs/firestore/quickstart#create) with these configurations:
 - Mode: `Test mode`
@@ -44,7 +42,7 @@ Create a `Firestore` database:
 
 ### Create an API Key
 
-Create an [Google Maps API key](https://developers.google.com/maps/documentation/javascript/get-api-key).
+[Create a Google Maps API key](https://developers.google.com/maps/documentation/javascript/get-api-key).
 Create an `.env` file with a Google Maps API key:
 
 ```sh

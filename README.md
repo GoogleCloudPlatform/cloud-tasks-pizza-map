@@ -14,7 +14,7 @@ The program works in the following way:
     1. Looks up the best pizza restaurant in that city accoring to the Google Maps Places API
     1. Stores the restaurant data in Firestore
 
-<img width="780" alt="Application Architecture" src="https://user-images.githubusercontent.com/744973/67311141-a32e5200-f4c4-11e9-88d9-3bdb3cf1b665.png">
+<img width="780" alt="An application architecture diagram of the Cloud Tasks with an HTTP target of a Cloud Function. The Cloud Function uses the Google Maps Nearby/Places APIs for map data and Firestore to store location data." src="https://user-images.githubusercontent.com/744973/67311141-a32e5200-f4c4-11e9-88d9-3bdb3cf1b665.png">
 
 ## Setup
 

@@ -27,7 +27,6 @@ The following APIs are used in this app:
 
 - `Cloud Tasks API`
 - `Maps Places API`
-- `Maps Static Map API`
 - `Maps Geocoding API`
 - `Firestore API`
 

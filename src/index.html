@@ -40,6 +40,7 @@
           const isRun = window.location.origin.includes('run.app');
           if (!isLocalhost && !isRun) {
             // include project ID in URL if GCF (e.g. not localhost or Run)
+            // TODO(developer) Change the project ID to your project if deploying to GCF.
             URL += '/tasks-pizza';
           }
           return URL;

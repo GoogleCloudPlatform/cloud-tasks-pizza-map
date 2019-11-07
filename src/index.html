@@ -36,8 +36,10 @@
         // Gets the URL for the API
         const GET_API_BASE_URL = () => {
           let URL = window.location.origin;
-          if (!window.location.origin.includes('localhost')) {
-            // include project ID in prod
+          const isLocalhost = window.location.origin.includes('localhost');
+          const isRun = window.location.origin.includes('run.app');
+          if (!isLocalhost && !isRun) {
+            // include project ID in URL if GCF (e.g. not localhost or Run)
             URL += '/tasks-pizza';
           }
           return URL;

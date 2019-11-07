@@ -72,11 +72,27 @@ URL: http://localhost:8080/
 
 Go to URL specified to view all routes for the application.
 
-## Deploy your Google Cloud Function
+## Deploy to Google Cloud
 
-Deploy your function using this script that uses `gcloud functions deploy` with configurations
-needed for this application:
+You have two options for deploying this application to Google Cloud:
+
+- Cloud Functions
+- Cloud Run
+
+The `gcloud` commands for deploying to each target are in the `scripts.sh` file.
+
+### Deploy to Google Cloud Function
+
+Deploy your function on Google Cloud Functions on runtime Node 10:
 
 ```sh
-npm run deploy
+npm run functions
+```
+
+### Deploy to Google Cloud Run
+
+You can also deploy this application to Cloud Run by first building the container, then deploying:
+
+```sh
+npm run cloudrun
 ```

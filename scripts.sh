@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euxo pipefail
 
 # Deploys the application to Google Cloud Functions
 deploy_to_functions() {

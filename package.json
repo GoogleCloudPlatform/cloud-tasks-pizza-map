@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "start": "FUNCTION_SOURCE=src npx @google-cloud/functions-framework",
-    "deploy": "gcloud functions deploy tasks-pizza --trigger-http --runtime=nodejs10 --env-vars-file=.env.yaml"
+    "functions": "source scripts.sh && deploy_to_functions",
+    "cloudrun": "source scripts.sh && deploy_to_run"
   },
   "dependencies": {
     "@google-cloud/firestore": "^2.3.0",

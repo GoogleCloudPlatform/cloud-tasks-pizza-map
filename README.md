@@ -2,6 +2,7 @@
 
 <img width="880" alt="Google Maps of Earth with 16k pins" src="https://user-images.githubusercontent.com/744973/67051632-3bad8680-f101-11e9-8da0-6a4206f0a247.png">
 
+> As featured on Medium: https://medium.com/p/db888675db71/
 
 A sample application using Cloud Tasks and Google Maps to find the best pizza restaurants around
 the world.

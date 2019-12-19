@@ -96,3 +96,8 @@ You can also deploy this application to Cloud Run by first building the containe
 ```sh
 npm run cloudrun
 ```
+
+### GIF
+
+Here is a GIF of the applicaiton working at different Google Map zoom levels
+![A Google Map with thousands of pins at different zoom levels](https://user-images.githubusercontent.com/744973/69364872-2af0b300-0c61-11ea-951f-20272657a9c8.gif)

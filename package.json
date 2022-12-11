@@ -15,7 +15,7 @@
     "@google-cloud/tasks": "^1.4.0",
     "@google/maps": "^0.5.5",
     "dotenv": "^8.1.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "firebase-admin": "^8.6.0",
     "node-fetch": "^2.6.0"
   },
